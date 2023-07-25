@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <link rel="icon" 
+      type="image/png" 
+      href="images/favicon.png">
+
+<!--   <script type="text/javascript" src="js/live.js"></script>
+ -->  <title>NFTU</title>
+</head>
+<body>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=.5, user-scalable=0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://code.createjs.com/1.0.0/tweenjs.min.js"></script>
+  <script src='https://code.createjs.com/createjs-2015.05.21.combined.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.7.0/Tween.js'></script>
+  <script src="js/jquery.touch.min.js"></script>
+  <script src="js/jquery.ui.touch-punch.min.js"></script>
+
+  <audio id="vrerror">
+    <source src="sound/vrerror.mp3" style="display: none;" type="audio/ogg">
+  </audio>
+  
+  <audio id="takeoffheadset">
+    <source src="sound/takeoffheadset.mp3" style="display: none;" type="audio/ogg">
+  </audio>
+
+  <audio id="dustfiltration">
+    <source src="sound/dustfiltration.mp3" style="display: none;" type="audio/ogg">
+  </audio>
+
+  <audio id="desktopstart">
+    <source src="sound/desktopstart.mp3" style="display: none;" type="audio/ogg">
+  </audio>
+
+  <audio id="main">
+    <source src="sound/main.mp3" style="display: none;" type="audio/ogg">
+  </audio>
+
+  <audio id="combine">
+    <source src="sound/combine.mp3" style="display: none;" type="audio/ogg">
+  </audio>
+
+  <audio id="pickupobject">
+    <source src="sound/pickupobject.mp3" style="display: none;" type="audio/ogg">
+  </audio>
+
+  <audio id="dooropen">
+    <source src="sound/dooropen.mp3" style="display: none;" type="audio/ogg">
+  </audio>
+
+  <audio id="floor12">
+    <source src="sound/floor12.mp3" style="display: none;" type="audio/ogg">
+  </audio>
+
+  <script src="js/game_over.js"></script>
+  <script src="js/f_waythrough.js"></script>
+  <script src="js/spread_folders.js"></script>
+  <script src="js/window.js"></script>
+  <script src="js/visualwindow.js"></script>
+  <script type="module" src="js/connect.js"></script>
+  <script src="js/inventory.js"></script>
+  <script src="js/stages.js"></script>
+  <script src="js/typing.js"></script>
+  <script src="js/rimage.js"></script>
+  <script src="js/folder.js"></script>
+
+<!--   <div class="comingroom" style="width: 100%; height: 100%; background-color: #450199; top: 0; left: 0; position: fixed; z-index: 1000000; pointer-events: none; color: #ffffff;"> coming soom </div> -->
+
+  <div class="go_title" id="go_title">
+    GAME OVER
+  </div>
+
+  <!-- START BAR -->
+
+  <style>
+
+    .menu{
+      top: 150px; 
+      width: 30vw; 
+      height: auto;
+      margin-left: 32vw;
+      position: absolute; 
+      background-color: #ffffff; 
+      border: 2px solid #222;
+      display: none;
+    }
+
+    .menu-inner{
+      text-align: center;
+    }
+
+    @media only screen and (max-width: 900px) {
+    .menu{
+      width: 60vw; 
+      margin-left: 15vw;
+    }
+  }
+
+    .sightoption{
+      padding-top: 10px;
+    }
+
+    .menuclose{
+      padding: 10px;
+      position: absolute;
+    }
+
+  </style>
+
+  <div class="menu">
+
+  <div class="topbar">
+      <div class="close_block" id="close">x</div>
+        <div class="titlebar" id="termtitlebar" style="padding-top: 2px" id="draggable">SETTINGS</div>
+      </div>
+
+    <br/>
+    <div class="menu-inner">
+      <h2>Select Display Options</h1>
+      <div class="sightoption" id="colour">colour</div>    
+      <div class="sightoption" id="nocolour">greyscale</div>    
+      <h2>Select Font size</h1>
+
+        <select id="size">
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+        </select>
+        <h2 id="continuegame">CONTINUE GAME</h2>
+      </div>
+    <br/>
+
+<!--     <h2 id="begingame">BEGIN GAME</h2>
+ -->    
+
+  </div>
+
+  <div class="startbarbox">
+  <div class="startbar" id="startbar">
+    <div class="sb" id="startsb">Starrrt</div>
+    <div class="sb" id="notessb">Notes From The Underground</div>
+    <div id="sound" style="margin-top: 3px">
+      <img id="soundbtn" onclick="playmainaudio()" src="images/snd/soundiconon.png">
+      <img id="soundbtnoff" style="display: none;" onclick="pausemainaudio()" src="images/snd/soundiconoff.png"> 
+  </div>
+    <div style="display: block; float: right; margin-top: 7px; padding-right: 45px;" class="settingbtn" id="settingbtn">
+      <img style="width: 27px;" src="images/settings.png">
+    </div>
+  </div>
+</div>
+
+  <!-- LOADER -->
+
+  <div class="dw" id="dwloader">
+    <div class="topbar">
+      <div class="close_block" id="close">x</div>
+        <div class="titlebar" id="draggable">LOADING</div>
+        </div>
+          <div class="dwc" id="dwc">
+            <div class="lb" id="lb"></div>
+            <div class="lbbg" id="lbbg"></div><br/>
+            <p>Loading Notes, please wait</p>
+     </div>
+  </div>
+
+  <!-- HIGH CONTRAST CHAT -->
+
+  <div class="dw" id="dwchat">
+    <div class="topbar">
+      <div class="close_block" id="close">x</div>
+        <div class="titlebar" id="draggable">MESSAGES</div>
+        </div>
+          <div class="dwc" id="dwc" style="background-color: #fdfd96">
+            <div class="t headline">
+              <h1 id="cv"></h1>
+            </div>
+     </div>
+  </div>
+
+  <script type="text/javascript">
+    
+  </script>
+
+  <!-- TERMINAL -->
+
+  <div class="dwterminal" id="dwterminal">
+    <div class="topbar">
+      <div class="close_block" id="close">x</div>
+        <div class="titlebar" id="termtitlebar" id="draggable">NFTU TERMINAL</div>
+        </div>
+          <div class="dwc" id="dwcterminal">
+          <div id="ttoutput">
+          </div>
+          <div class="ttinputdiv" id="ttinputdiv" style="height: 100px;">
+          <input type="text" onkeypress="this.value = this.value.toLowerCase();" id="ttinput" placeholder=">"/>
+          <input value="submit" style="display: none;" type="button"/>
+          </div>
+     </div>
+  </div>
+
+  <!-- NFTU FOLDER -->
+
+  <div class="dw" id="dwnftufolder">
+    <div class="topbar">
+      <div class="close" id="ntfuclose">x</div>
+        <div class="titlebar" id="draggable">Notes From The Underground</div>
+        </div>
+          <div class="dwc" id="dwcfolder">
+            <img class="fi" id="NFTU_ICON" src="images/nftui/NFTU_ICON.png">
+            <img class="fi" id="read_me" src="images/nftui/README_ICON.png">
+     </div>
+  </div>
+
+  <!-- NFTU INVENTORY -->
+
+  <div class="dw" id="dwnftuinventory">
+    <div class="topbar">
+      <div class="close_block" id="ntfuclose">x</div>
+        <div class="titlebar" id="draggable">INVENTORY</div>
+        </div>
+          <div class="dwc" id="dwcinventory">
+     </div>
+  </div>
+
+  <!-- VISUAL WINDOW -->
+
+  <div class="dw" id="dwvisual">
+    <div class="topbar">
+      <div class="close_block" id="close">x</div>
+        <div class="titlebar" id="draggable">GRAPHICS</div>
+        </div>
+          <div class="dwc" id="dwcvis">
+       <img id="visualcue" src="">
+     </div>
+  </div>
+
+  <!-- WORMHOLE WINDOW -->
+
+  <div class="dw" id="dwwm">
+    <div class="topbar">
+      <div class="close" id="close">x</div>
+        <div class="titlebar" id="draggable">LINK</div>
+        </div>
+     </div>
+  </div>
+
+  <!-- EVIL HIGH CONTRAST WINDOW -->
+
+  <div class="dwterminal" id="dwehc">
+    <div class="topbar">
+      <div class="close" id="close">x</div>
+        <div class="titlebar" id="draggable">WELCOME</div>
+        </div>
+        <video id="ehcv" width="100%" height="90%" playsinline loop autoplay mute src="videos/evilhc.mp4"></video>
+     </div>
+  </div>
+
+  <!-- END FOLDERS -->
+
+  <div class="dw" id="dwnftufolderend">
+    <div class="topbar">
+      <div class="close" id="ntfuclose">x</div>
+        <div class="titlebar" id="draggable">EXTRACTION SEQUENCE</div>
+        </div>
+          <div class="dwc" id="dwcfolder">
+            <img class="endfi" id="END" src="images/fic/escape.png">
+            <img class="endfi" id="CNTRL" src="images/fic/controls.png">
+              <img class="endfi" style="display: none;" id="MAN" src="images/fic/manual.png">
+              <img class="endfi" style="display: none;" id="CONF" src="images/fic/config.png">
+                <img class="endfi" style="display: none;" id="CONFFINAL" src="images/fic/config.png">
+                <img class="endfi" style="display: none;" id="MISS" src="images/fic/missing.png">
+                  <img class="endfi" style="display: none;" id="TEMP" src="images/fic/temp.png">
+                  <img class="endfi" style="display: none;" id="BWBW" src="images/fic/bwbw.png">
+                    <img class="endfi" style="display: none;" id="BW" src="images/fic/bw.png">
+                    <img class="endfi" style="display: none;" id="LIQ" src="images/fic/liquids.png">
+                    <img class="endfi" style="display: none;" id="COREBROKEN" src="images/fic/corebroken.png">
+                    <img class="endfi" style="display: none;" id="CORE" src="images/fic/core.png">
+                    <img class="endfi" style="display: none;" id="CHIP" src="images/fic/chips.png">
+                      <img class="endfi" style="display: none;" id="TEMPBROKEN" src="images/fic/tempbroken.png">
+                      <img class="endfi" style="display: none;" id="CHIPSBROKEN" src="images/fic/chipsbroken.png">
+              <div class="folderspace"></div>
+     </div>
+  </div>
+
+  <!-- TRUTH WINDOW -->
+
+  <div class="dwreadme" id="dwtruth">
+    <div class="topbar">
+      <div class="close" id="close">x</div>
+        <div class="titlebar" id="draggable">HEADSET MANUAL</div>
+          <h1 id="cvtruth"></h1>
+        </div>
+     </div>
+  </div>
+
+  <!-- READ ME WINDOW -->
+
+  <div class="dwreadme" id="dwreadme">
+    <div class="topbar">
+      <div class="close" id="readmeclose">x</div>
+        <div class="titlebar" id="draggable">READ ME</div>
+        </div>
+          <h1 id="cvreadme">
+            Welcome to Notes from the Underground - the Game.<br/>
+            Navigate your way around this text based adventure game using commands like 'look at ____' and 'open door' etc.<br/>
+            You can take and combine objects you find.<br/>
+            Some puzzles will require a bit of lateral thinking.<br/>
+            Good luck and remember, the sun never sets for those who ride into it. HC.
+          </h1>
+     </div>
+
+  <!-- READ ME WINDOW -->
+
+  <div class="dwreadme" id="dwm">
+    <div class="topbar">
+      <div class="close" id="readmeclose">x</div>
+        <div class="titlebar" id="draggable">READ ME</div>
+        </div>
+          <h1 id="cvreadme">
+            7/7 FOR SEFETY - AN OVERHEATING HEADSET FLAG WILL RESULT IN CURRENT USERS AUTOMATIC ESCAPE FROM SYNC
+          </h1>
+     </div>
+
+  <!-- TEMPERATURE -->
+
+  <div class="dw" id="dwloadertemp">
+    <div class="topbar">
+      <div class="close" id="close">x</div>
+        <div class="titlebar" id="draggable">LOADING</div>
+        </div>
+          <div class="dwc" id="dwc">
+            <div class="lb" id="lbtemp"></div>
+            <div class="lbbg" id="lbbg"></div><br/>
+            <p>Headset Core temperature</p>
+     </div>
+  </div>
+
+  <!-- ESCAPE -->
+
+  <div class="dw" id="dwloaderescape">
+    <div class="topbar">
+      <div class="close" id="close">x</div>
+        <div class="titlebar" id="draggable">-</div>
+        </div>
+          <div class="dwc" id="dwc">
+            <img id="warning" src="images/escape/warning.png">
+            <p>Headset Overheating</p>
+            <p>Sync Ended, force extraction to available host body</p>
+            <p>Current session ended!!</p>
+     </div>
+  </div>
+
+  <!-- VISUAL FINAL WINDOW -->
+
+  <div class="dw" id="dwvisualfinal">
+    <div class="topbar">
+      <div class="close" id="close">x</div>
+        <div class="titlebar" id="draggable">GRAPHICS</div>
+        </div>
+          <div class="dwc" id="dwcvisfinal">
+       <img id="visualcuefinal" src="images/vc/stage_20/door_0/1.png">
+     </div>
+  </div>
+
+  <!-- BACKGROUND ICONS -->
+
+  <div class="dicons" id="dicons"> 
+   <img id="di1" class="di" src="images/dicc_fix/floppy_01.png"><img id="di2" class="di" src="images/dicc_fix/rotary_01.png"><img id="di3" class="di" src="images/dicc_fix/acid_01.png"><img id="di4" class="di" src="images/dicc_fix/fonts_01.png"><img id="di5" class="di" src="images/dicc_fix/rubik_01.png"><img id="di6" class="di" src="images/dicc_fix/aim_01.png"><img id="di7" class="di" src="images/dicc_fix/future_01.png"><img id="di8" class="di" src="images/dicc_fix/scheme_01.png"><img id="di9" class="di" src="images/dicc_fix/akai_01.png"><img id="di10" class="di" src="images/dicc_fix/gentle_01.png"><img id="di11" class="di" src="images/dicc_fix/seam_01.png"><img id="di12" class="di" src="images/dicc_fix/arcadia_01.png"><img id="di13" class="di" src="images/dicc_fix/gods_01.png"><img id="di14" class="di" src="images/dicc_fix/serial_01.png"><img id="di15" class="di" src="images/dicc_fix/bible_01.png"><img id="di16" class="di" src="images/dicc_fix/going_01.png"><img id="di17" class="di" src="images/dicc_fix/smallprint_01.png"><img id="di18" class="di" src="images/dicc_fix/blame_01.png"><img id="di19" class="di" src="images/dicc_fix/holdonme_01.png"><img id="di20" class="di" src="images/dicc_fix/snes_01.png"><img id="di21" class="di" src="images/dicc_fix/bloodart_01.png"><img id="di22" class="di" src="images/dicc_fix/johny_01.png"><img id="di23" class="di" src="images/dicc_fix/sphinx_01.png"><img id="di24" class="di" src="images/dicc_fix/buzz_01.png"><img id="di25" class="di" src="images/dicc_fix/joyless_01.png"><img id="di26" class="di" src="images/dicc_fix/sync_01.png"><img id="di27" class="di" src="images/dicc_fix/bytes_01.png"><img id="di28" class="di" src="images/dicc_fix/letitscroll_01.png"><img id="di29" class="di" src="images/dicc_fix/tax_01.png"><img id="di30" class="di" src="images/dicc_fix/calc_01.png"><img id="di31" class="di" src="images/dicc_fix/liquid_01.png"><img id="di32" class="di" src="images/dicc_fix/thesun_01.png"><img id="di33" class="di" src="images/dicc_fix/calender_01.png"><img id="di34" class="di" src="images/dicc_fix/meta_01.png"><img id="di35" class="di" src="images/dicc_fix/timeis_01.png"><img id="di36" class="di" src="images/dicc_fix/cam_01.png"><img id="di37" class="di" src="images/dicc_fix/nepotism_01.png"><img id="di38" class="di" src="images/dicc_fix/timestretch_01.png"><img id="di39" class="di" src="images/dicc_fix/clap_01.png"><img id="di40" class="di" src="images/dicc_fix/netscape_01.png"><img id="di41" class="di" src="images/dicc_fix/tomato_01.png"><img id="di42" class="di" src="images/dicc_fix/coffee_01.png"><img id="di43" class="di" src="images/dicc_fix/never_01.png"><img id="di44" class="di" src="images/dicc_fix/trash_01.png"><img id="di45" class="di" src="images/dicc_fix/cog_01.png"><img id="di46" class="di" src="images/dicc_fix/oldhouse_01.png"><img id="di47" class="di" src="images/dicc_fix/tree_01.png"><img id="di48" class="di" src="images/dicc_fix/comp_01.png"><img id="di49" class="di" src="images/dicc_fix/pad_01.png"><img id="di50" class="di" src="images/dicc_fix/ufakes_01.png"><img id="di51" class="di" src="images/dicc_fix/contrast_01.png"><img id="di52" class="di" src="images/dicc_fix/pizza_01.png"><img id="di53" class="di" src="images/dicc_fix/unit_01.png"><img id="di54" class="di" src="images/dicc_fix/cruel_01.png"><img id="di55" class="di" src="images/dicc_fix/power_01.png"><img id="di56" class="di" src="images/dicc_fix/upload_01.png"><img id="di57" class="di" src="images/dicc_fix/cultured_01.png"><img id="di58" class="di" src="images/dicc_fix/printer_01.png"><img id="di59" class="di" src="images/dicc_fix/vcr_01.png"><img id="di60" class="di" src="images/dicc_fix/dance_01.png"><img id="di61" class="di" src="images/dicc_fix/qbooks_01.png"><img id="di62" class="di" src="images/dicc_fix/videon_01.png"><img id="di63" class="di" src="images/dicc_fix/data_01.png"><img id="di64" class="di" src="images/dicc_fix/quaint_01.png"><img id="di65" class="di" src="images/dicc_fix/vintage_01.png"><img id="di66" class="di" src="images/dicc_fix/death_01.png"><img id="di67" class="di" src="images/dicc_fix/readme_01.png"><img id="di68" class="di" src="images/dicc_fix/voyage_01.png"><img id="di69" class="di" src="images/dicc_fix/disk2_01.png"><img id="di70" class="di" src="images/dicc_fix/realm_01.png"><img id="di71" class="di" src="images/dicc_fix/windows_01.png"><img id="di72" class="di" src="images/dicc_fix/dolphin_01.png"><img id="di73" class="di" src="images/dicc_fix/rhythm_01.png"><img id="di74" class="di" src="images/dicc_fix/xerox_01.png"><img id="di75" class="di" src="images/dicc_fix/dream_01.png"><img id="di76" class="di" src="images/dicc_fix/roland_01.png">
+  </div>
+
+  </div>
+
+  <script src="js/menu_click.js"></script>
+  <script src="js/sound.js"></script>
+
+</body>
+
+<script>
+
+    $("#colour").click(function(){
+      var x = document.querySelectorAll("*"); 
+      x[0].style.filter = "grayscale(0%)"; 
+    })
+
+    $("#nocolour").click(function(){
+      var x = document.querySelectorAll("*"); 
+      x[0].style.filter = "grayscale(100%)"; 
+    })
+
+    $("#size").change(function() {
+        $('*').css("font-size", $(this).val() + "px");
+    });
+
+    $("#settingbtn").click(function(){
+      // $(".startbar").hide();
+      $(".menu").show();
+      $(".menu").css("z-index","100000000");
+    })
+
+    $("#continuegame").click(function(){
+        // $(".startbar").show();
+        $(".menu").hide();
+    })
+
+    $("#begingame").click(function(){
+        $("#startbar").show();
+        $(".menu").hide();
+        $("#begingame").hide();
+        $("#continuegame").show();
+    })
+
+  </script>
+
+</html>
